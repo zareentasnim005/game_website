@@ -1,16 +1,53 @@
-<!DOCTYPE html><html><body style="margin:0;background:#111;color:#fff;font-family:sans-serif;text-align:center">
-<p>Score: <b id="s">0</b> (Left/Right keys) <button onclick="init()">Restart</button></p>
-<canvas id="c" width="300" height="440" style="background:#333;max-width:100%"></canvas>
-<p><button onclick="mv(-1)">⬅</button><button onclick="mv(1)">➡</button></p>
-<script>
-const x=c.getContext("2d");let p,o,sc,run,t;
-function init(){p=1;o=[];sc=0;run=true;clearInterval(t);t=setInterval(loop,30)}
-function mv(d){p=Math.max(0,Math.min(2,p+d))}
-onkeydown=e=>{if(e.key=="ArrowLeft")mv(-1);if(e.key=="ArrowRight")mv(1);if(e.key.startsWith("Arrow"))e.preventDefault()};
-function loop(){if(!run)return;sc++;s.textContent=Math.floor(sc/10);
- if(sc%40==0)o.push({l:Math.floor(Math.random()*3),y:-60});o.forEach(q=>q.y+=4+sc/800);o=o.filter(q=>q.y<460);
- x.fillStyle="#333";x.fillRect(0,0,300,440);x.fillStyle="#555";x.fillRect(100,0,3,440);x.fillRect(200,0,3,440);
- x.fillStyle="#ff5c8a";o.forEach(q=>x.fillRect(q.l*100+25,q.y,50,60));
- x.fillStyle="#ffc83d";x.fillRect(p*100+25,370,50,60);
- if(o.some(q=>q.l==p&&q.y+60>370&&q.y<430)){run=false;x.fillStyle="#fff";x.font="30px sans-serif";x.fillText("Game Over",80,200)}}
-init();</script></body></html>
+<!DOCTYPE html>
+<html>
+
+<body style="margin:0;background:#111;color:#fff;font-family:sans-serif;text-align:center">
+    <p>Score: <b id="s">0</b> (Left/Right keys) <button onclick="init()">Restart</button></p>
+    <canvas id="c" width="300" height="440" style="max-width:100%"></canvas>
+    <p><button onclick="mv(-1)">⬅</button><button onclick="mv(1)">➡</button></p>
+    <script>
+        const x = c.getContext("2d"); let p, o, sc, run, t, off;
+        const COLORS = ["#e63946", "#2a9df4", "#f4a261", "#9b5de5", "#2ec4b6"];
+        function rr(a, b, w, h, r) { x.beginPath(); x.moveTo(a + r, b); x.arcTo(a + w, b, a + w, b + h, r); x.arcTo(a + w, b + h, a, b + h, r); x.arcTo(a, b + h, a, b, r); x.arcTo(a, b, a + w, b, r); x.closePath() }
+        // up=true: amader gari (samner dike), up=false: samner theke asha gari
+        function car(cx, y, col, up) {
+            const w = 44, h = 80, a = cx - w / 2;
+            x.fillStyle = "rgba(0,0,0,.35)"; rr(a + 4, y + 5, w, h, 10); x.fill();
+            x.fillStyle = "#111";[[a - 4, y + 10], [a + w - 4, y + 10], [a - 4, y + h - 26], [a + w - 4, y + h - 26]].forEach(q => { rr(q[0], q[1], 8, 18, 3); x.fill() });
+            x.fillStyle = col; rr(a, y, w, h, 12); x.fill();
+            x.fillStyle = "rgba(255,255,255,.25)"; rr(a + 4, y + 3, w - 8, 8, 4); x.fill();
+            const gy = up ? y + 18 : y + 24;
+            x.fillStyle = "#bfe3ff"; rr(a + 6, gy, w - 12, 18, 5); x.fill();
+            x.fillStyle = col; x.fillRect(a + 8, gy + 22, w - 16, 14);
+            x.fillStyle = "#9ccbe8"; rr(a + 7, up ? y + h - 24 : y + 10, w - 14, 12, 4); x.fill();
+            x.fillStyle = up ? "#fff6a8" : "#ff3b3b";
+            x.fillRect(a + 4, up ? y + 1 : y + h - 5, 10, 4); x.fillRect(a + w - 14, up ? y + 1 : y + h - 5, 10, 4);
+            x.fillStyle = up ? "#ff3b3b" : "#fff6a8";
+            x.fillRect(a + 4, up ? y + h - 5 : y + 1, 10, 4); x.fillRect(a + w - 14, up ? y + h - 5 : y + 1, 10, 4);
+        }
+        function road() {
+            x.fillStyle = "#2e7d32"; x.fillRect(0, 0, 300, 440);
+            x.fillStyle = "#3a3a3a"; x.fillRect(20, 0, 260, 440);
+            x.fillStyle = "#fff"; x.fillRect(20, 0, 4, 440); x.fillRect(276, 0, 4, 440);
+            x.fillStyle = "#ffd23f";
+            for (let i = -1; i < 9; i++) { const yy = i * 60 + off; x.fillRect(105, yy, 4, 30); x.fillRect(191, yy, 4, 30) }
+        }
+        function init() { p = 1; o = []; sc = 0; off = 0; run = true; clearInterval(t); t = setInterval(loop, 30) }
+        function mv(d) { p = Math.max(0, Math.min(2, p + d)) }
+        onkeydown = e => { if (e.key == "ArrowLeft") mv(-1); if (e.key == "ArrowRight") mv(1); if (e.key.startsWith("Arrow")) e.preventDefault() };
+        const LX = l => 20 + 43 + l * 87;
+        function loop() {
+            if (!run) return; sc++; s.textContent = Math.floor(sc / 10);
+            const v = 4 + sc / 800; off = (off + v) % 60;
+            if (sc % 45 == 0) o.push({ l: Math.floor(Math.random() * 3), y: -90, c: COLORS[Math.floor(Math.random() * COLORS.length)] });
+            o.forEach(q => q.y += v); o = o.filter(q => q.y < 460);
+            road(); o.forEach(q => car(LX(q.l), q.y, q.c, false)); car(LX(p), 350, "#ffd23f", true);
+            if (o.some(q => q.l == p && q.y + 80 > 350 && q.y < 430)) {
+                run = false;
+                x.fillStyle = "rgba(0,0,0,.6)"; x.fillRect(0, 170, 300, 90); x.fillStyle = "#fff"; x.font = "bold 32px sans-serif"; x.fillText("Game Over", 75, 225)
+            }
+        }
+        init();</script>
+</body>
+
+</html>

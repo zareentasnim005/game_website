@@ -7,7 +7,7 @@ let B,over;const W=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4
 function win(p){return W.some(w=>w.every(i=>B[i]==p))}
 function draw(){b.innerHTML="";B.forEach((v,i)=>{const d=document.createElement("div");d.className="c";d.textContent=v;d.onclick=()=>go(i);b.appendChild(d)})}
 function init(){B=Array(9).fill("");over=false;st.textContent="Your turn (X)";draw()}
-function end(){if(win("X")){st.textContent="You win! 🎉";return over=true}if(win("O")){st.textContent="Computer wins!";return over=true}
+function end(){if(win("X")){st.textContent="You win! 🎉";return over=true}if(win("O")){st.textContent="You loss!";return over=true}
  if(B.every(v=>v)){st.textContent="Draw!";return over=true}return false}
 function go(i){if(over||B[i])return;B[i]="X";if(!end()){const e=B.map((v,j)=>v?-1:j).filter(j=>j>=0);
  let m=null;for(const p of["O","X"]){for(const j of e){B[j]=p;const w=win(p);B[j]="";if(w){m=j;break}}if(m!==null)break}

@@ -1,0 +1,14 @@
+<!DOCTYPE html><html><body style="margin:0;background:#1d1d33;color:#fff;font-family:sans-serif;text-align:center">
+<p>Moves: <b id="m">0</b> <button onclick="init()">Restart</button></p>
+<div id="g" style="display:grid;grid-template-columns:repeat(4,80px);gap:10px;justify-content:center"></div>
+<style>.k{height:80px;border-radius:12px;background:#6c4cff;font-size:2.2rem;display:flex;align-items:center;justify-content:center;cursor:pointer}.k.o{background:#fff}.k.d{background:#22c993}</style>
+<script>
+let a,mv,lock,done;
+function init(){const e=["🍎","🐶","🚗","⭐","🎈","🍕","⚽","🌈"];const l=[...e,...e].sort(()=>Math.random()-.5);
+ g.innerHTML="";mv=0;m.textContent=0;a=null;lock=false;done=0;
+ l.forEach(v=>{const k=document.createElement("div");k.className="k";k.dataset.v=v;k.onclick=()=>pick(k);g.appendChild(k)})}
+function pick(k){if(lock||k===a||k.classList.contains("d"))return;k.classList.add("o");k.textContent=k.dataset.v;
+ if(!a){a=k;return}mv++;m.textContent=mv;
+ if(a.dataset.v===k.dataset.v){a.className=k.className="k d";a=null;if(++done==8)setTimeout(()=>alert("You won in "+mv+" moves!"),200)}
+ else{lock=true;setTimeout(()=>{[a,k].forEach(z=>{z.className="k";z.textContent=""});a=null;lock=false},700)}}
+init();</script></body></html>

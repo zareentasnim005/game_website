@@ -1,0 +1,14 @@
+<!DOCTYPE html><html><body style="margin:0;background:#111;color:#fff;font-family:sans-serif;text-align:center">
+<p>Score: <b id="s">0</b> (Arrow keys / buttons)</p><canvas id="c" width="400" height="400" style="background:#1d1d33;max-width:100%"></canvas>
+<p><button onclick="d(0,-1)">⬆</button><button onclick="d(-1,0)">⬅</button><button onclick="d(0,1)">⬇</button><button onclick="d(1,0)">➡</button> <button onclick="init()">Restart</button></p>
+<script>
+const c=document.getElementById("c"),x=c.getContext("2d"),N=20,T=20;let sn,dx,dy,f,sc,run,t;
+function init(){sn=[{x:10,y:10}];dx=1;dy=0;sc=0;f={x:5,y:5};run=true;s.textContent=0;clearInterval(t);t=setInterval(step,110)}
+function d(a,b){if(a!==-dx||b!==-dy){dx=a;dy=b}}
+onkeydown=e=>{const m={ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0]}[e.key];if(m){d(...m);e.preventDefault()}};
+function step(){if(!run)return;const h={x:sn[0].x+dx,y:sn[0].y+dy};
+ if(h.x<0||h.y<0||h.x>=N||h.y>=N||sn.some(p=>p.x==h.x&&p.y==h.y)){run=false;x.fillStyle="#fff";x.font="30px sans-serif";x.fillText("Game Over",130,200);return}
+ sn.unshift(h);if(h.x==f.x&&h.y==f.y){sc+=10;s.textContent=sc;f={x:Math.floor(Math.random()*N),y:Math.floor(Math.random()*N)}}else sn.pop();
+ x.fillStyle="#1d1d33";x.fillRect(0,0,400,400);x.fillStyle="#ff5c8a";x.fillRect(f.x*T,f.y*T,T-2,T-2);
+ x.fillStyle="#22c993";sn.forEach(p=>x.fillRect(p.x*T,p.y*T,T-2,T-2))}
+init();</script></body></html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html><html><body style="margin:0;background:#111;color:#fff;font-family:sans-serif;text-align:center">
+<p>Score: <b id="s">0</b> (Left/Right keys) <button onclick="init()">Restart</button></p>
+<canvas id="c" width="300" height="440" style="background:#333;max-width:100%"></canvas>
+<p><button onclick="mv(-1)">⬅</button><button onclick="mv(1)">➡</button></p>
+<script>
+const x=c.getContext("2d");let p,o,sc,run,t;
+function init(){p=1;o=[];sc=0;run=true;clearInterval(t);t=setInterval(loop,30)}
+function mv(d){p=Math.max(0,Math.min(2,p+d))}
+onkeydown=e=>{if(e.key=="ArrowLeft")mv(-1);if(e.key=="ArrowRight")mv(1);if(e.key.startsWith("Arrow"))e.preventDefault()};
+function loop(){if(!run)return;sc++;s.textContent=Math.floor(sc/10);
+ if(sc%40==0)o.push({l:Math.floor(Math.random()*3),y:-60});o.forEach(q=>q.y+=4+sc/800);o=o.filter(q=>q.y<460);
+ x.fillStyle="#333";x.fillRect(0,0,300,440);x.fillStyle="#555";x.fillRect(100,0,3,440);x.fillRect(200,0,3,440);
+ x.fillStyle="#ff5c8a";o.forEach(q=>x.fillRect(q.l*100+25,q.y,50,60));
+ x.fillStyle="#ffc83d";x.fillRect(p*100+25,370,50,60);
+ if(o.some(q=>q.l==p&&q.y+60>370&&q.y<430)){run=false;x.fillStyle="#fff";x.font="30px sans-serif";x.fillText("Game Over",80,200)}}
+init();</script></body></html>

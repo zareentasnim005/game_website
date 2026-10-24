@@ -1,0 +1,11 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PlayZone</title><link rel="stylesheet" href="css/style.css"></head><body>
+<header><div class="wrap"><a class="logo" href="index.html">Play<span>Zone</span></a><nav><a href="index.html" class="on">Home</a><a href="index.html#cats">Categories</a><a href="index.html#new">New</a><a href="index.html#premium">Premium</a></nav><input id="search" class="search" placeholder="Search games..."></div></header>
+<div class="wrap"><div class="box" style="margin-top:24px"><h2 id="t"></h2><p id="b"></p></div></div>
+<footer><div class="wrap"><nav><a href="page.html?p=about">About</a><a href="page.html?p=contact">Contact</a><a href="page.html?p=privacy">Privacy Policy</a><a href="page.html?p=terms">Terms</a></nav>&copy; 2026 PlayZone. All rights reserved.</div></footer><script>
+const P={about:["About Us","PlayZone is a free browser gaming portal. Amader lokkho: shobar jonno simple, fun, free games."],
+contact:["Contact","Email: hello@playzone.example | Phone: +880 1XXX-XXXXXX"],
+privacy:["Privacy Policy","Amra sudhu basic analytics ebong advertising cookies byabohar kori. Apnar personal tothyo bikri kori na."],
+terms:["Terms of Use","Ei site e game khelar mddhome apni amader niyom mene nichchen. Games sudhu personal use er jonno."]};
+const p=P[new URLSearchParams(location.search).get("p")]||P.about;
+document.getElementById("t").textContent=p[0];document.getElementById("b").textContent=p[1];</script></body></html>
